@@ -4,7 +4,7 @@ import Link from "next/link";
 import { Heart, Users, Trophy, Clock, User, LogOut } from "lucide-react";
 import { useEffect, useState } from "react";
 import { getCurrentUserWithRole, signOut } from "@/lib/auth";
-import { getEpisodesWithStats } from "@/lib/database";
+import { getEpisodesWithStats, getTotalParticipants } from "@/lib/database";
 import AdSense from "@/components/AdSense";
 
 export default function Home() {
@@ -33,14 +33,15 @@ export default function Home() {
         } else {
           console.log('에피소드 데이터:', episodesData);
           setEpisodes(episodesData || []);
-          
-          // 총 참여자 수 계산
-          const total = episodesData?.reduce((sum, episode) => {
-            console.log(`회차 ${episode.number}: ${episode.total_predictions}명`);
-            return sum + (episode.total_predictions || 0);
-          }, 0) || 0;
-          console.log('총 참여자 수:', total);
-          setTotalParticipants(total);
+        }
+
+        // 총 참여자 수 조회 (고유 사용자 수)
+        const { data: totalParticipantsData, error: participantsError } = await getTotalParticipants();
+        if (participantsError) {
+          console.error('총 참여자 수 조회 오류:', participantsError);
+        } else {
+          console.log('총 참여자 수:', totalParticipantsData);
+          setTotalParticipants(totalParticipantsData || 0);
         }
       } catch (error) {
         console.error('데이터 로드 중 오류:', error);
@@ -210,7 +211,7 @@ export default function Home() {
               </div>
               <div className="text-gray-700 mb-4">총 참여자 수</div>
               <div className="text-sm text-gray-600">
-                모든 회차에 참여한 사용자 수
+                예측에 참여한 고유 사용자 수
               </div>
             </div>
           </div>

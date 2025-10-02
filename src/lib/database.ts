@@ -754,6 +754,26 @@ export async function getEpisodesWithStats(seasonId?: string) {
   return { data: episodesWithStats, error: null }
 }
 
+// 전체 참여자 수 조회 (고유 사용자 수)
+export async function getTotalParticipants() {
+  const { data, error } = await supabase
+    .from('user_predictions')
+    .select('user_id')
+    .not('user_id', 'is', null)
+
+  if (error) {
+    console.error('전체 참여자 수 조회 오류:', error)
+    return { data: 0, error }
+  }
+
+  // 고유한 user_id의 개수 계산
+  const uniqueUsers = new Set(data?.map(prediction => prediction.user_id) || [])
+  const totalParticipants = uniqueUsers.size
+
+  console.log('고유 사용자 수:', totalParticipants)
+  return { data: totalParticipants, error: null }
+}
+
 // 디버깅용: 모든 회차 조회
 export async function getAllEpisodes() {
   const { data, error } = await supabase
