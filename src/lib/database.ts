@@ -88,7 +88,8 @@ export async function getParticipants(seasonId?: string) {
     query = query.eq('season_id', seasonId)
   }
 
-  const { data, error } = await query.order('name', { ascending: true })
+  // 등록 순서대로 정렬 (created_at 기준)
+  const { data, error } = await query.order('created_at', { ascending: true })
 
   if (error) {
     console.error('출연자 조회 오류:', error)
