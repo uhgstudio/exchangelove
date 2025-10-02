@@ -4,6 +4,7 @@ import Link from "next/link";
 import { Heart, Users, Trophy, Clock, User, LogOut } from "lucide-react";
 import { useEffect, useState } from "react";
 import { getCurrentUserWithRole, signOut } from "@/lib/auth";
+import AdSense from "@/components/AdSense";
 
 export default function Home() {
   const [user, setUser] = useState<any>(null);
@@ -116,6 +117,15 @@ export default function Home() {
             <br />
             정확한 예측으로 랭킹에 도전하고 다른 팬들과 경쟁해보세요.
           </p>
+          
+          {/* AdSense Banner */}
+          <div className="mb-8 flex justify-center">
+            <AdSense 
+              slot="1234567890" 
+              style={{ display: 'block', width: '728px', height: '90px' }}
+              className="max-w-full"
+            />
+          </div>
           
           <div className="flex justify-center space-x-4 mb-12">
             <Link 
