@@ -133,9 +133,9 @@ export default function Home() {
             환승연애4 X예측
           </h2>
           <p className="text-xl text-gray-600 mb-8 max-w-3xl mx-auto">
-            출연자들의 X를 예측하고, 방송 결과와 비교해보세요! 
+            <strong>환승연애4</strong> 출연자들의 X를 예측하고, 방송 결과와 비교해보세요! 
             <br />
-            정확한 예측으로 랭킹에 도전하고 다른 팬들과 경쟁해보세요.
+            <strong>환승연애</strong> 팬들을 위한 예측으로 정확한 예측으로 랭킹에 도전하고 다른 팬들과 경쟁해보세요.
           </p>
           
           {/* AdSense Banner */}
