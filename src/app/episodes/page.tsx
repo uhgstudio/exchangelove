@@ -106,12 +106,6 @@ export default function EpisodesPage() {
               >
                 내 예측
               </Link>
-              <Link 
-                href="/admin" 
-                className="text-gray-600 hover:text-gray-900 px-3 py-2 rounded-md text-sm font-medium"
-              >
-                관리자
-              </Link>
             </nav>
           </div>
         </div>

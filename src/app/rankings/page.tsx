@@ -103,14 +103,6 @@ export default function RankingsPage() {
                   >
                     내 예측
                   </Link>
-                  {isAdmin && (
-                    <Link 
-                      href="/admin" 
-                      className="text-gray-600 hover:text-gray-900 px-3 py-2 rounded-md text-sm font-medium"
-                    >
-                      관리자
-                    </Link>
-                  )}
                   <button
                     onClick={handleSignOut}
                     className="text-gray-600 hover:text-gray-900 px-3 py-2 rounded-md text-sm font-medium flex items-center space-x-1"

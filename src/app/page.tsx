@@ -1,11 +1,12 @@
 'use client'
 
 import Link from "next/link";
-import { Heart, Users, Trophy, Clock, User, LogOut } from "lucide-react";
+import { Heart, Users, Trophy, Clock } from "lucide-react";
 import { useEffect, useState } from "react";
 import { getCurrentUserWithRole, signOut } from "@/lib/auth";
 import { getEpisodesWithStats, getTotalParticipants } from "@/lib/database";
 import AdSense from "@/components/AdSense";
+import Navigation from "@/components/Navigation";
 
 export default function Home() {
   const [user, setUser] = useState<any>(null);
@@ -89,14 +90,6 @@ export default function Home() {
                   >
                     내 예측
                   </Link>
-                  {isAdmin && (
-                    <Link 
-                      href="/admin" 
-                      className="text-gray-600 hover:text-gray-900 px-3 py-2 rounded-md text-sm font-medium"
-                    >
-                      관리자
-                    </Link>
-                  )}
                   <button
                     onClick={handleSignOut}
                     className="text-gray-600 hover:text-gray-900 px-3 py-2 rounded-md text-sm font-medium flex items-center space-x-1"
