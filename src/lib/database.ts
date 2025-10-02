@@ -688,6 +688,8 @@ export async function getEpisodeParticipants(episodeId: string) {
 
 // 회차별 통계 조회
 export async function getEpisodeStats(episodeId: string) {
+  console.log('getEpisodeStats 호출 - episodeId:', episodeId);
+  
   const { data, error } = await supabase
     .from('user_predictions')
     .select('*')
@@ -698,7 +700,10 @@ export async function getEpisodeStats(episodeId: string) {
     return { data: null, error }
   }
 
+  console.log('user_predictions 데이터:', data);
   const totalPredictions = data?.length || 0
+  console.log('총 예측 수:', totalPredictions);
+  
   // TODO: 정답률 계산 로직 추가 (실제 정답 데이터가 있을 때)
 
   return { 

@@ -4,16 +4,20 @@ import Link from "next/link";
 import { Heart, Users, Trophy, Clock, User, LogOut } from "lucide-react";
 import { useEffect, useState } from "react";
 import { getCurrentUserWithRole, signOut } from "@/lib/auth";
+import { getEpisodesWithStats } from "@/lib/database";
 import AdSense from "@/components/AdSense";
 
 export default function Home() {
   const [user, setUser] = useState<any>(null);
   const [loading, setLoading] = useState(true);
   const [isAdmin, setIsAdmin] = useState(false);
+  const [episodes, setEpisodes] = useState<any[]>([]);
+  const [totalParticipants, setTotalParticipants] = useState(0);
 
   useEffect(() => {
-    const checkUser = async () => {
+    const loadData = async () => {
       try {
+        // 사용자 정보 로드
         const { user: currentUser, error, isAdmin: userIsAdmin } = await getCurrentUserWithRole();
         if (error) {
           console.error('사용자 확인 오류:', error);
@@ -21,14 +25,31 @@ export default function Home() {
           setUser(currentUser);
           setIsAdmin(userIsAdmin);
         }
+
+        // 에피소드 데이터 로드
+        const { data: episodesData, error: episodesError } = await getEpisodesWithStats();
+        if (episodesError) {
+          console.error('에피소드 데이터 로드 오류:', episodesError);
+        } else {
+          console.log('에피소드 데이터:', episodesData);
+          setEpisodes(episodesData || []);
+          
+          // 총 참여자 수 계산
+          const total = episodesData?.reduce((sum, episode) => {
+            console.log(`회차 ${episode.number}: ${episode.total_predictions}명`);
+            return sum + (episode.total_predictions || 0);
+          }, 0) || 0;
+          console.log('총 참여자 수:', total);
+          setTotalParticipants(total);
+        }
       } catch (error) {
-        console.error('사용자 확인 중 오류:', error);
+        console.error('데이터 로드 중 오류:', error);
       } finally {
         setLoading(false);
       }
     };
 
-    checkUser();
+    loadData();
   }, []);
 
   const handleSignOut = async () => {
@@ -147,24 +168,24 @@ export default function Home() {
         <div className="grid md:grid-cols-3 gap-8 mt-16">
           <div className="bg-white p-6 rounded-lg shadow-md text-center">
             <Users className="h-12 w-12 text-pink-500 mx-auto mb-4" />
-            <h3 className="text-xl font-semibold mb-2">커플 예측</h3>
-            <p className="text-gray-600">
-              드래그 앤 드롭으로 간편하게 출연자들을 매칭하고 커플을 예측해보세요.
+            <h3 className="text-xl font-semibold mb-2 text-gray-900">커플 예측</h3>
+            <p className="text-gray-700">
+              클릭으로 간편하게 출연자들을 매칭하고 커플을 예측해보세요.
             </p>
           </div>
           
           <div className="bg-white p-6 rounded-lg shadow-md text-center">
             <Trophy className="h-12 w-12 text-pink-500 mx-auto mb-4" />
-            <h3 className="text-xl font-semibold mb-2">랭킹 시스템</h3>
-            <p className="text-gray-600">
+            <h3 className="text-xl font-semibold mb-2 text-gray-900">랭킹 시스템</h3>
+            <p className="text-gray-700">
               정확한 예측으로 점수를 획득하고 다른 사용자들과 순위를 경쟁해보세요.
             </p>
           </div>
           
           <div className="bg-white p-6 rounded-lg shadow-md text-center">
             <Clock className="h-12 w-12 text-pink-500 mx-auto mb-4" />
-            <h3 className="text-xl font-semibold mb-2">실시간 결과</h3>
-            <p className="text-gray-600">
+            <h3 className="text-xl font-semibold mb-2 text-gray-900">실시간 결과</h3>
+            <p className="text-gray-700">
               방송이 끝나면 즉시 결과를 확인하고 통계를 살펴보세요.
             </p>
           </div>
@@ -172,20 +193,24 @@ export default function Home() {
 
         {/* Current Episode Status */}
         <div className="mt-16 bg-white rounded-lg shadow-md p-8">
-          <h3 className="text-2xl font-bold text-center mb-6">현재 진행 상황</h3>
+          <h3 className="text-2xl font-bold text-center mb-6 text-gray-900">현재 진행 상황</h3>
           <div className="grid md:grid-cols-2 gap-8">
             <div className="text-center">
-              <div className="text-3xl font-bold text-pink-500 mb-2">3회차</div>
-              <div className="text-gray-600 mb-4">현재 진행 중인 회차</div>
-              <div className="text-sm text-gray-500">
-                예측 마감: 2024년 1월 15일 오후 8시
+              <div className="text-3xl font-bold text-pink-500 mb-2">
+                {episodes.length > 0 ? `${episodes.length}회차` : '0회차'}
+              </div>
+              <div className="text-gray-700 mb-4">총 회차 수</div>
+              <div className="text-sm text-gray-600">
+                {episodes.length > 0 ? `최신 회차: ${episodes[episodes.length - 1]?.title || ''}` : '아직 회차가 없습니다'}
               </div>
             </div>
             <div className="text-center">
-              <div className="text-3xl font-bold text-green-500 mb-2">1,247명</div>
-              <div className="text-gray-600 mb-4">참여자 수</div>
-              <div className="text-sm text-gray-500">
-                지금까지 참여한 사용자 수
+              <div className="text-3xl font-bold text-green-500 mb-2">
+                {totalParticipants.toLocaleString()}명
+              </div>
+              <div className="text-gray-700 mb-4">총 참여자 수</div>
+              <div className="text-sm text-gray-600">
+                모든 회차에 참여한 사용자 수
               </div>
             </div>
           </div>
