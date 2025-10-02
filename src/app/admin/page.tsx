@@ -3,10 +3,10 @@
 import { useState, useEffect } from 'react'
 import Link from 'next/link'
 import { useRouter } from 'next/navigation'
-import { Settings, Users, Calendar, BarChart3, Plus, Edit, Eye, X, Save, LogOut } from 'lucide-react'
+import { Settings, Users, Calendar, BarChart3, Plus, Edit, X, Save, LogOut } from 'lucide-react'
 import { getSeasons, getEpisodes, getParticipants, createSeason, createEpisode, createParticipant, updateSeason, updateEpisode, updateParticipant, deleteParticipant, getAllEpisodes, testUpdateEpisode, getOfficialCouples, createOfficialCouple, deleteOfficialCouple } from '@/lib/database'
 import { getCurrentUserWithRole, signOut } from '@/lib/auth'
-import { Season, Episode, Participant } from '@/types/database'
+import { Season, Participant } from '@/types/database'
 
 export default function AdminPage() {
   const router = useRouter()
@@ -16,7 +16,7 @@ export default function AdminPage() {
   const [officialCouples, setOfficialCouples] = useState<any[]>([])
   const [loading, setLoading] = useState(true)
   const [user, setUser] = useState<any>(null)
-  const [isAdmin, setIsAdmin] = useState(false)
+  const [, setIsAdmin] = useState(false)
   
   // 모달 상태
   const [showSeasonModal, setShowSeasonModal] = useState(false)

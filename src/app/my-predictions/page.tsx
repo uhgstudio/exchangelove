@@ -3,7 +3,7 @@
 import Link from 'next/link'
 import { useRouter } from 'next/navigation'
 import { useEffect, useState } from 'react'
-import { CheckCircle, XCircle, Clock, Eye, Trophy, User, LogOut } from 'lucide-react'
+import { CheckCircle, XCircle, Clock, Trophy, User, LogOut } from 'lucide-react'
 import { formatDate } from '@/lib/utils'
 import { getUserPredictions } from '@/lib/database'
 import { getCurrentUserWithRole, signOut } from '@/lib/auth'
@@ -94,28 +94,6 @@ export default function MyPredictionsPage() {
     }
   }
 
-  const getCorrectnessIcon = (isCorrect: boolean | null) => {
-    if (isCorrect === null) return <Clock className="w-4 h-4 text-gray-400" />
-    return isCorrect ? 
-      <CheckCircle className="w-4 h-4 text-green-500" /> : 
-      <XCircle className="w-4 h-4 text-red-500" />
-  }
-
-  const getCorrectnessText = (isCorrect: boolean | null) => {
-    if (isCorrect === null) return '대기 중'
-    return isCorrect ? '정답' : '오답'
-  }
-
-  const getCorrectnessClass = (isCorrect: boolean | null) => {
-    if (isCorrect === null) return 'text-gray-500'
-    return isCorrect ? 'text-green-600' : 'text-red-600'
-  }
-
-  const calculateAccuracy = (pairs: any[]) => {
-    const correctCount = pairs.filter(p => p.isCorrect === true).length
-    const totalCount = pairs.filter(p => p.isCorrect !== null).length
-    return totalCount > 0 ? Math.round((correctCount / totalCount) * 100) : 0
-  }
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-pink-50 to-purple-50">

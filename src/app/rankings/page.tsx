@@ -2,7 +2,7 @@
 
 import Link from 'next/link'
 import { useEffect, useState } from 'react'
-import { Trophy, Medal, Award, Users, TrendingUp, Clock, User, LogOut } from 'lucide-react'
+import { Trophy, Users, Clock, User, LogOut } from 'lucide-react'
 import { getEpisodesWithStats } from '@/lib/database'
 import { getCurrentUserWithRole, signOut } from '@/lib/auth'
 

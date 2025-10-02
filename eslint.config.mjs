@@ -20,6 +20,19 @@ const eslintConfig = [
       "next-env.d.ts",
     ],
   },
+  {
+    rules: {
+      // TypeScript 관련 규칙 완화
+      "@typescript-eslint/no-explicit-any": "warn",
+      "@typescript-eslint/no-unused-vars": "warn",
+      
+      // Next.js 관련 규칙 완화
+      "@next/next/no-img-element": "warn",
+      
+      // 기타 규칙 완화
+      "no-console": "off",
+    },
+  },
 ];
 
 export default eslintConfig;

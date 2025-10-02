@@ -106,7 +106,7 @@ export default function PredictPage() {
   }>({ male: [], female: [] })
   const [episode, setEpisode] = useState<Episode | null>(null)
   const [user, setUser] = useState<any>(null)
-  const [isAdmin, setIsAdmin] = useState(false)
+  const [, setIsAdmin] = useState(false)
 
   const [selectedMale, setSelectedMale] = useState<string | null>(null)
   const [selectedFemale, setSelectedFemale] = useState<string | null>(null)
