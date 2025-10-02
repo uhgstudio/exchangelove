@@ -2,19 +2,33 @@
 
 import { useState, useEffect } from 'react'
 import Link from 'next/link'
-import { Clock, Users, Trophy, CheckCircle, Loader2 } from 'lucide-react'
+import { Clock, Users, Trophy, CheckCircle, Loader2, User, LogOut } from 'lucide-react'
 import { formatDate, formatTimeRemaining } from '@/lib/utils'
 import { getEpisodesWithStats } from '@/lib/database'
+import { getCurrentUserWithRole, signOut } from '@/lib/auth'
 
 export default function EpisodesPage() {
   const [episodes, setEpisodes] = useState<any[]>([])
   const [loading, setLoading] = useState(true)
+  const [user, setUser] = useState<any>(null)
+  const [isAdmin, setIsAdmin] = useState(false)
 
   // 데이터 로딩
   useEffect(() => {
-    const loadEpisodes = async () => {
+    const loadData = async () => {
       try {
         setLoading(true)
+        
+        // 사용자 정보 로드
+        const { user: currentUser, error: authError, isAdmin: adminStatus } = await getCurrentUserWithRole()
+        if (authError) {
+          console.error('사용자 확인 오류:', authError)
+        } else {
+          setUser(currentUser)
+          setIsAdmin(adminStatus)
+        }
+
+        // 회차 데이터 로드
         const { data, error } = await getEpisodesWithStats()
         
         if (error) {
@@ -26,14 +40,23 @@ export default function EpisodesPage() {
           setEpisodes(data)
         }
       } catch (error) {
-        console.error('회차 데이터 로딩 오류:', error)
+        console.error('데이터 로딩 오류:', error)
       } finally {
         setLoading(false)
       }
     }
 
-    loadEpisodes()
+    loadData()
   }, [])
+
+  const handleSignOut = async () => {
+    try {
+      await signOut()
+      window.location.href = '/'
+    } catch (error) {
+      console.error('로그아웃 중 오류:', error)
+    }
+  }
 
   const getStatusBadge = (status: string) => {
     switch (status) {
@@ -88,24 +111,74 @@ export default function EpisodesPage() {
               </Link>
             </div>
             <nav className="flex space-x-4">
-              <Link 
-                href="/episodes" 
-                className="text-pink-600 px-3 py-2 rounded-md text-sm font-medium"
-              >
-                회차별 예측
-              </Link>
-              <Link 
-                href="/rankings" 
-                className="text-gray-600 hover:text-gray-900 px-3 py-2 rounded-md text-sm font-medium"
-              >
-                랭킹
-              </Link>
-              <Link 
-                href="/my-predictions" 
-                className="text-gray-600 hover:text-gray-900 px-3 py-2 rounded-md text-sm font-medium"
-              >
-                내 예측
-              </Link>
+              {user ? (
+                <>
+                  <div className="flex items-center space-x-2 text-gray-600">
+                    <User className="w-4 h-4" />
+                    <span className="text-sm font-medium">{user.username || user.email}</span>
+                  </div>
+                  <Link 
+                    href="/episodes" 
+                    className="text-pink-600 px-3 py-2 rounded-md text-sm font-medium"
+                  >
+                    회차별 예측
+                  </Link>
+                  <Link 
+                    href="/rankings" 
+                    className="text-gray-600 hover:text-gray-900 px-3 py-2 rounded-md text-sm font-medium"
+                  >
+                    랭킹
+                  </Link>
+                  <Link 
+                    href="/my-predictions" 
+                    className="text-gray-600 hover:text-gray-900 px-3 py-2 rounded-md text-sm font-medium"
+                  >
+                    내 예측
+                  </Link>
+                  {isAdmin && (
+                    <Link 
+                      href="/admin" 
+                      className="text-red-600 hover:text-red-900 px-3 py-2 rounded-md text-sm font-medium"
+                    >
+                      관리자
+                    </Link>
+                  )}
+                  <button
+                    onClick={handleSignOut}
+                    className="text-gray-600 hover:text-gray-900 px-3 py-2 rounded-md text-sm font-medium flex items-center space-x-1"
+                  >
+                    <LogOut className="w-4 h-4" />
+                    <span>로그아웃</span>
+                  </button>
+                </>
+              ) : (
+                <>
+                  <Link 
+                    href="/episodes" 
+                    className="text-pink-600 px-3 py-2 rounded-md text-sm font-medium"
+                  >
+                    회차별 예측
+                  </Link>
+                  <Link 
+                    href="/rankings" 
+                    className="text-gray-600 hover:text-gray-900 px-3 py-2 rounded-md text-sm font-medium"
+                  >
+                    랭킹
+                  </Link>
+                  <Link 
+                    href="/auth/login" 
+                    className="text-gray-600 hover:text-gray-900 px-3 py-2 rounded-md text-sm font-medium"
+                  >
+                    로그인
+                  </Link>
+                  <Link 
+                    href="/auth/signup" 
+                    className="bg-pink-500 text-white px-4 py-2 rounded-md text-sm font-medium hover:bg-pink-600"
+                  >
+                    회원가입
+                  </Link>
+                </>
+              )}
             </nav>
           </div>
         </div>
