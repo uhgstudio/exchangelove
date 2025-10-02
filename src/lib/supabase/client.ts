@@ -2,9 +2,16 @@ import { createBrowserClient } from '@supabase/ssr'
 import { Database } from '@/types/database'
 
 export function createClient() {
+  const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL || 'https://abcdefghijklmnop.supabase.co'
+  const supabaseKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY || 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImFiY2RlZmdoaWprbG1ub3AiLCJyb2xlIjoiYW5vbiIsImlhdCI6MTYzNDU2Nzg5MCwiZXhwIjoxOTUwMTQzODkwfQ.example_signature_here'
+  
+  if (!process.env.NEXT_PUBLIC_SUPABASE_URL || !process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY) {
+    console.warn('Supabase 환경변수가 설정되지 않았습니다. 기본값을 사용합니다.')
+  }
+  
   return createBrowserClient<Database>(
-    process.env.NEXT_PUBLIC_SUPABASE_URL!,
-    process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!,
+    supabaseUrl,
+    supabaseKey,
     {
       cookies: {
         get(name: string) {
