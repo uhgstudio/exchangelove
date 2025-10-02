@@ -10,19 +10,17 @@ export default function RankingsPage() {
   const [user, setUser] = useState<any>(null)
   const [episodes, setEpisodes] = useState<any[]>([])
   const [loading, setLoading] = useState(true)
-  const [isAdmin, setIsAdmin] = useState(false)
 
   useEffect(() => {
     const loadData = async () => {
       try {
         // 인증 상태 확인
-        const { user: currentUser, error: authError, isAdmin: userIsAdmin } = await getCurrentUserWithRole()
+        const { user: currentUser, error: authError } = await getCurrentUserWithRole()
         if (authError || !currentUser) {
           console.error('인증 오류:', authError)
           // 랭킹 페이지는 로그인 없이도 볼 수 있도록 함
         } else {
           setUser(currentUser)
-          setIsAdmin(userIsAdmin)
         }
 
         // 회차별 통계 데이터 가져오기

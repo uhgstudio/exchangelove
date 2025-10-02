@@ -1,17 +1,15 @@
 'use client'
 
 import Link from "next/link";
-import { Heart, Users, Trophy, Clock } from "lucide-react";
+import { Heart, Users, Trophy, Clock, User, LogOut } from "lucide-react";
 import { useEffect, useState } from "react";
 import { getCurrentUserWithRole, signOut } from "@/lib/auth";
 import { getEpisodesWithStats, getTotalParticipants } from "@/lib/database";
 import AdSense from "@/components/AdSense";
-import Navigation from "@/components/Navigation";
 
 export default function Home() {
   const [user, setUser] = useState<any>(null);
   const [loading, setLoading] = useState(true);
-  const [isAdmin, setIsAdmin] = useState(false);
   const [episodes, setEpisodes] = useState<any[]>([]);
   const [totalParticipants, setTotalParticipants] = useState(0);
 
@@ -19,12 +17,11 @@ export default function Home() {
     const loadData = async () => {
       try {
         // 사용자 정보 로드
-        const { user: currentUser, error, isAdmin: userIsAdmin } = await getCurrentUserWithRole();
+        const { user: currentUser, error } = await getCurrentUserWithRole();
         if (error) {
           console.error('사용자 확인 오류:', error);
         } else {
           setUser(currentUser);
-          setIsAdmin(userIsAdmin);
         }
 
         // 에피소드 데이터 로드

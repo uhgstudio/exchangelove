@@ -13,13 +13,12 @@ export default function MyPredictionsPage() {
   const [user, setUser] = useState<any>(null)
   const [predictions, setPredictions] = useState<any[]>([])
   const [loading, setLoading] = useState(true)
-  const [isAdmin, setIsAdmin] = useState(false)
 
   useEffect(() => {
     const loadData = async () => {
       try {
         // 먼저 인증 상태 확인
-        const { user: currentUser, error: authError, isAdmin: userIsAdmin } = await getCurrentUserWithRole()
+        const { user: currentUser, error: authError } = await getCurrentUserWithRole()
         if (authError || !currentUser) {
           console.error('인증 오류:', authError)
           router.push('/auth/login')
@@ -27,7 +26,6 @@ export default function MyPredictionsPage() {
         }
 
         setUser(currentUser)
-        setIsAdmin(userIsAdmin)
         console.log('인증된 사용자:', currentUser)
 
         // 사용자의 예측 데이터 가져오기
