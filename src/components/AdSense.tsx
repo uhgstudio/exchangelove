@@ -19,9 +19,9 @@ export default function AdSense({
 }: AdSenseProps) {
   useEffect(() => {
     try {
-      // @ts-ignore
+      // @ts-expect-error - AdSense global variable
       if (typeof window !== 'undefined' && window.adsbygoogle) {
-        // @ts-ignore
+        // @ts-expect-error - AdSense global variable
         (window.adsbygoogle = window.adsbygoogle || []).push({});
       }
     } catch (error) {

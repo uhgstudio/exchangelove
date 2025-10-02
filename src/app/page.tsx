@@ -31,7 +31,6 @@ export default function Home() {
         if (episodesError) {
           console.error('에피소드 데이터 로드 오류:', episodesError);
         } else {
-          console.log('에피소드 데이터:', episodesData);
           setEpisodes(episodesData || []);
         }
 
@@ -40,7 +39,6 @@ export default function Home() {
         if (participantsError) {
           console.error('총 참여자 수 조회 오류:', participantsError);
         } else {
-          console.log('총 참여자 수:', totalParticipantsData);
           setTotalParticipants(totalParticipantsData || 0);
         }
       } catch (error) {
