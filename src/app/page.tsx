@@ -6,22 +6,25 @@ import { useEffect, useState } from "react";
 import { getCurrentUserWithRole, signOut } from "@/lib/auth";
 import { getEpisodesWithStats, getTotalParticipants } from "@/lib/database";
 import AdSense from "@/components/AdSense";
+import AdSenseScript from "@/components/AdSenseScript";
 
 export default function Home() {
   const [user, setUser] = useState<any>(null);
   const [loading, setLoading] = useState(true);
   const [episodes, setEpisodes] = useState<any[]>([]);
   const [totalParticipants, setTotalParticipants] = useState(0);
+  const [isAdmin, setIsAdmin] = useState(false);
 
   useEffect(() => {
     const loadData = async () => {
       try {
         // 사용자 정보 로드
-        const { user: currentUser, error } = await getCurrentUserWithRole();
+        const { user: currentUser, error, isAdmin: adminStatus } = await getCurrentUserWithRole();
         if (error) {
           console.error('사용자 확인 오류:', error);
         } else {
           setUser(currentUser);
+          setIsAdmin(adminStatus);
         }
 
         // 에피소드 데이터 로드
@@ -64,6 +67,7 @@ export default function Home() {
   };
   return (
     <div className="min-h-screen bg-gradient-to-br from-pink-50 to-purple-50">
+      <AdSenseScript />
       {/* Header */}
       <header className="bg-white shadow-sm">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -87,6 +91,14 @@ export default function Home() {
                   >
                     내 예측
                   </Link>
+                  {isAdmin && (
+                    <Link 
+                      href="/admin" 
+                      className="text-red-600 hover:text-red-900 px-3 py-2 rounded-md text-sm font-medium"
+                    >
+                      관리자
+                    </Link>
+                  )}
                   <button
                     onClick={handleSignOut}
                     className="text-gray-600 hover:text-gray-900 px-3 py-2 rounded-md text-sm font-medium flex items-center space-x-1"

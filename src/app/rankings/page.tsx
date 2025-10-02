@@ -10,17 +10,19 @@ export default function RankingsPage() {
   const [user, setUser] = useState<any>(null)
   const [episodes, setEpisodes] = useState<any[]>([])
   const [loading, setLoading] = useState(true)
+  const [isAdmin, setIsAdmin] = useState(false)
 
   useEffect(() => {
     const loadData = async () => {
       try {
         // 인증 상태 확인
-        const { user: currentUser, error: authError } = await getCurrentUserWithRole()
+        const { user: currentUser, error: authError, isAdmin: adminStatus } = await getCurrentUserWithRole()
         if (authError || !currentUser) {
           console.error('인증 오류:', authError)
           // 랭킹 페이지는 로그인 없이도 볼 수 있도록 함
         } else {
           setUser(currentUser)
+          setIsAdmin(adminStatus)
         }
 
         // 회차별 통계 데이터 가져오기
@@ -101,6 +103,14 @@ export default function RankingsPage() {
                   >
                     내 예측
                   </Link>
+                  {isAdmin && (
+                    <Link 
+                      href="/admin" 
+                      className="text-red-600 hover:text-red-900 px-3 py-2 rounded-md text-sm font-medium"
+                    >
+                      관리자
+                    </Link>
+                  )}
                   <button
                     onClick={handleSignOut}
                     className="text-gray-600 hover:text-gray-900 px-3 py-2 rounded-md text-sm font-medium flex items-center space-x-1"

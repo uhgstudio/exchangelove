@@ -45,32 +45,25 @@ export default function RootLayout({
 }: Readonly<{
   children: React.ReactNode;
 }>) {
-  const structuredData = {
-    "@context": "https://schema.org",
-    "@type": "WebSite",
-    "name": "환승연애4 X예측",
-    "description": "환승연애4 출연자들의 X를 예측하고 결과를 확인해보세요!",
-    "url": "https://your-domain.com", // 실제 도메인으로 변경 필요
-    "potentialAction": {
-      "@type": "SearchAction",
-      "target": "https://your-domain.com/search?q={search_term_string}",
-      "query-input": "required name=search_term_string"
-    },
-    "keywords": "환승연애4, 환승연애, X예측, 예측, 환승연애4예측, 환승연애4X, 환승연애4출연자"
-  };
-
   return (
     <html lang="ko">
       <head>
-        <script 
-          async 
-          src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-1595756211338642"
-          crossOrigin="anonymous"
-        />
         <script
           type="application/ld+json"
           dangerouslySetInnerHTML={{
-            __html: JSON.stringify(structuredData),
+            __html: JSON.stringify({
+              "@context": "https://schema.org",
+              "@type": "WebSite",
+              "name": "환승연애4 X예측",
+              "description": "환승연애4 출연자들의 X를 예측하고 결과를 확인해보세요!",
+              "url": "https://your-domain.com",
+              "potentialAction": {
+                "@type": "SearchAction",
+                "target": "https://your-domain.com/search?q={search_term_string}",
+                "query-input": "required name=search_term_string"
+              },
+              "keywords": "환승연애4, 환승연애, X예측, 예측, 환승연애4예측, 환승연애4X, 환승연애4출연자"
+            }),
           }}
         />
       </head>
