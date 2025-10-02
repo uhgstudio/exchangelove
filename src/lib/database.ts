@@ -1,5 +1,5 @@
 import { createClient } from './supabase/client'
-import { Database, Participant, Episode, Season, UserPrediction } from '@/types/database'
+import { Participant, Episode, Season, UserPrediction } from '@/types/database'
 
 const supabase = createClient()
 

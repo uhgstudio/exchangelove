@@ -1,5 +1,4 @@
 import { createClient } from './supabase/client'
-import bcrypt from 'bcryptjs'
 
 export async function signUp(email: string, password: string, username: string) {
   const supabase = createClient()

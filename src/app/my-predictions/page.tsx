@@ -3,7 +3,7 @@
 import Link from 'next/link'
 import { useRouter } from 'next/navigation'
 import { useEffect, useState } from 'react'
-import { CheckCircle, XCircle, Clock, Trophy, User, LogOut } from 'lucide-react'
+import { CheckCircle, Clock, Trophy, User, LogOut } from 'lucide-react'
 import { formatDate } from '@/lib/utils'
 import { getUserPredictions } from '@/lib/database'
 import { getCurrentUserWithRole, signOut } from '@/lib/auth'
